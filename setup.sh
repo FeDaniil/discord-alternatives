@@ -14,9 +14,9 @@ else
   echo "Unknown app. Currently only mattermost and rocketchat are supported."
   exit 1
 fi
-curl -L "https://github.com/FeDaniil/discord-alternatives/achive/master.zip"
+curl -L -o master.zip "https://github.com/FeDaniil/discord-alternatives/archive/master.zip"
 unzip -q master.zip
-cd $APP/ansible
+cd master/$APP/ansible
 ansible-playbook -i inventory install.yml
 
 echo "Done!"
