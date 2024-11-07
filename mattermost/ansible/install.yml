@@ -42,7 +42,8 @@
         vtype: string
     - name: Download omnibus pre-install script
       ansible.builtin.get_url:
-        url: https://deb.packages.mattermost.com/repo-setup.sh dest: /tmp/mattermost/omnibus-preinstall.sh
+        url: https://deb.packages.mattermost.com/repo-setup.sh
+        dest: /tmp/mattermost/omnibus-preinstall.sh
     - name: Execute omnibus pre-onstall script
       ansible.builtin.shell: /tmp/mattermost/omnibus-preinstall.sh
     - name: Install mattermost-omnibus
