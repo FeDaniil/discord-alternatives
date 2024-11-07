@@ -40,14 +40,17 @@
         question: mattermost-omnibus/email
         value: "{{ lookup('ansible.builtin.env', 'ADMIN_EMAIL') }}"
         vtype: string
-    - name: Run omnibus pre-install script
-      ansible.builtin.command: curl -o- https://deb.packages.mattermost.com/repo-setup.sh | sudo bash
+    - name: Download omnibus pre-install script
+      ansible.builtin.get_url:
+        url: https://deb.packages.mattermost.com/repo-setup.sh dest: /tmp/mattermost/omnibus-preinstall.sh
+    - name: Execute omnibus pre-onstall script
+      ansible.builtin.shell: /tmp/mattermost/omnibus-preinstall.sh
     - name: Install mattermost-omnibus
       ansible.builtin.apt:
         name: mattermost-omnibus
       environment:
         DEBIAN_FRONTEND: noninteractive
     - name: Enable calls for everyone
-      ansible.builtin.command: mmctl config set "PluginSettings.Plugins.com.mattermost.calls.defaultenabled" "true"
+      ansible.builtin.shell: mmctl config set "PluginSettings.Plugins.com.mattermost.calls.defaultenabled" "true"
     - name: Set Mattermost server name
-      ansible.builtin.command: mmctl config set "ServiceSettings.SiteName" "{{ lookup('ansible.builtin.env', 'SERVER_NAME') }}"
+      ansible.builtin.shell: mmctl config set "ServiceSettings.SiteName" "{{ lookup('ansible.builtin.env', 'SERVER_NAME') }}"
