@@ -4,10 +4,9 @@ while IFS== read -r key value; do
   printf -v "$key" %s "$value" && export "$key"
 done <.env
 # install ansible
-echo "Installing Python and Ansible..."
+echo "Installing Ansible..."
 sudo apt update
-sudo apt install -y python3 python3-pip unzip
-python3 -m pip install ansible
+sudo apt install -y ansible
 # download and run ansible scripts
 if [[ $APP = "mattermost" ]]; then
   echo "Installing Mattermost..."
@@ -19,4 +18,5 @@ curl -o ./ansible.zip "https://download-directory.github.io?url=https://github.c
 unzip -q ansible.zip
 cd ansible
 ansible-playbook -i inventory install.yml
+
 echo "Done!"
