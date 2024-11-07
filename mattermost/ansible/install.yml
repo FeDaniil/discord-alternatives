@@ -22,8 +22,8 @@
         - '3478'
     - name: Import Mattermost GPG public key
       ansible.builtin.get_url:
-        url: https://deb.packages.mattermost.com/pubkey.gpg
-        dest: /usr/share/keyrings/mattermost-archive-keyring.gpg
+        url: https://deb.packages.mattermost.com/pubkey.gpg # bullshit, it is asc actually
+        dest: /usr/share/keyrings/mattermost-archive-keyring.asc
     - name: Ensure debconf is installed
       ansible.builtin.apt:
         name: debconf-utils
