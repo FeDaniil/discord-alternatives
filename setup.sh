@@ -6,7 +6,7 @@ done <.env
 # install ansible
 echo "Installing Python and Ansible..."
 sudo apt update
-sudo apt install python3, unzip
+sudo apt install python3 unzip
 python3 -m pip install ansible
 # download and run ansible scripts
 if [[ $APP = "mattermost" ]]; then
