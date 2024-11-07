@@ -40,6 +40,8 @@
         question: mattermost-omnibus/email
         value: "{{ lookup('ansible.builtin.env', 'ADMIN_EMAIL') }}"
         vtype: string
+    - name: Run omnibus pre-install script
+      ansible.builtin.command: curl -o- https://deb.packages.mattermost.com/repo-setup.sh | sudo bash
     - name: Install mattermost-omnibus
       ansible.builtin.apt:
         name: mattermost-omnibus

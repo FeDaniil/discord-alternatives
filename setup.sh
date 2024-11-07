@@ -17,6 +17,6 @@ fi
 curl -L -o master.zip "https://github.com/FeDaniil/discord-alternatives/archive/master.zip"
 unzip -q master.zip
 cd discord-alternatives-master/$APP/ansible
-ansible-playbook -i inventory install.yml
+sudo ansible-playbook -i inventory install.yml
 
 echo "Done!"
