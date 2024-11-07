@@ -28,5 +28,8 @@
 	},
 	"dependencies": {
 		"@skeletonlabs/skeleton": "^2.10.3"
+	},
+	"overrides": {
+		"svelte": "$svelte"
 	}
 }
