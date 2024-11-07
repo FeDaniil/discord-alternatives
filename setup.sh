@@ -6,7 +6,7 @@ done <.env
 # install ansible and svn (needed to download single folder of github repo)
 echo "Installing Ansible..."
 sudo apt update
-sudo apt install -y ansible svn
+sudo apt install -y ansible subversion
 # download and run ansible scripts
 if [[ $APP = "mattermost" ]]; then
   echo "Installing Mattermost..."
