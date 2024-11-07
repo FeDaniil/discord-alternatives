@@ -45,6 +45,11 @@
         url: https://deb.packages.mattermost.com/repo-setup.sh
         dest: /tmp/mattermost/omnibus-preinstall.sh
         mode: '554'
+    - name: Patch to use insecure http nginx.org as it has fucked up SSL certificates
+      ansible.builtin.replace:
+        path: /tmp/mattermost/omnibus-preinstall.sh
+        regexp: 'https:\/\/nginx.org'
+        replace: 'http://nginx.org'
     - name: Execute omnibus pre-install script
       ansible.builtin.shell: /tmp/mattermost/omnibus-preinstall.sh
     - name: Install mattermost-omnibus
