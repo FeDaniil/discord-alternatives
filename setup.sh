@@ -3,10 +3,10 @@
 while IFS== read -r key value; do
   printf -v "$key" %s "$value" && export "$key"
 done <.env
-# install ansible and svn (needed to download single folder of github repo)
+# install ansible
 echo "Installing Ansible..."
 sudo apt update
-sudo apt install -y ansible subversion
+sudo apt install -y ansible unzip
 # download and run ansible scripts
 if [[ $APP = "mattermost" ]]; then
   echo "Installing Mattermost..."
@@ -14,8 +14,9 @@ else
   echo "Unknown app. Currently only mattermost and rocketchat are supported."
   exit 1
 fi
-svn export https://github.com/FeDaniil/discord-alternatives/trunk/$APP/ansible
-cd ansible
+curl -L "https://github.com/FeDaniil/discord-alternatives/achive/master.zip"
+unzip -q master.zip
+cd $APP/ansible
 ansible-playbook -i inventory install.yml
 
 echo "Done!"
