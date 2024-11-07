@@ -17,13 +17,14 @@
     let serverName = '';
     let serverAddress = '';
     let result = '';
+    let serverDomain = '';
     let copied = false;
     let selectedPlatform = 'mattermost';
 
     const platforms: Platform[] = [
         { id: 'mattermost', name: 'Mattermost', port: '8065', enabled: true },
         { id: 'rocketchat', name: 'Rocket.Chat', port: '3000', enabled: false, comingSoon: true },
-        { id: 'zulip', name: 'Zulip', port: '443', enabled: false, comingSoon: true }
+        { id: 'matrix', name: 'Matrix', port: '443', enabled: false, comingSoon: true }
     ];
 
     function copyToClipboard() {
@@ -33,18 +34,13 @@
     }
 
     function generateScript() {
-        return `#!/bin/bash
-echo "Deploying Mattermost Server"
-echo "Server Name: ${serverName}"
-echo "Server Address: ${serverAddress}"
-# Add deployment commands below
-docker run --name mattermost -d --rm \\
-  -e "MATTERMOST_HTTP_PORT=8065" \\
-  -e "DB_HOST=your-db-host" \\
-  -e "DB_PORT_NUMBER=3306" \\
-  -p 8065:8065 \\
-  mattermost/mattermost-preview
-echo "Mattermost Server ${serverName} deployed at ${serverAddress}"`;
+        return `
+sudo mkdir -p /opt/${selectedPlatform} && cd /opt/${selectedPlatform} && echo "APP=${selectedPlatform}
+SERVER_NAME=${serverName}
+SERVER_DOMAIN=${serverDomain}
+ADMIN_EMAIL=${serverAddress}" > .env
+sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/discord-alternatives/HEAD/setup.sh)"
+        `;
     }
 
     function selectPlatform(platform: Platform) {
@@ -94,11 +90,15 @@ echo "Mattermost Server ${serverName} deployed at ${serverAddress}"`;
             <!-- Форма для ввода данных -->
             <div class="flex flex-col gap-6 mb-8">
                 <div class="flex flex-col gap-2">
-                    <Label for="name">Имя домена:</Label>
+                    <Label for="name">Имя сервера:</Label>
                     <Input id="name" bind:value={serverName}/>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <Label for="address">IP адрес:</Label>
+                    <Label for="name">Имя домена:</Label>
+                    <Input id="name" bind:value={serverDomain}/>
+                </div>
+                <div class="flex flex-col gap-2">
+                    <Label for="address">Email адрес:</Label>
                     <Input id="address" bind:value={serverAddress}/>
                 </div>
                 <div class="flex justify-center">
@@ -121,7 +121,7 @@ echo "Mattermost Server ${serverName} deployed at ${serverAddress}"`;
                         </Button>
                     </div>
                     <div class="p-4 mt-2 rounded-lg border border-gray-300 bg-gray-50">
-                        <pre class="text-xs whitespace-pre-wrap">{{result}}</pre>
+                        <pre class="text-xs whitespace-pre-wrap">{result}</pre>
                     </div>
                 </div>
             {/if}
