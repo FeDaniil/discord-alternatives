@@ -21,7 +21,9 @@
         - '8443'
         - '3478'
     - name: Import Mattermost GPG public key
-      ansible.builtin.shell: curl -sL -o- https://deb.packages.mattermost.org/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/mattermost-archive-keyring.gpg > /dev/null
+      ansible.builtin.shell:
+        cmd: curl -sL -o- https://deb.packages.mattermost.com/pubkey.gpg | gpg --dearmor | sudo tee /usr/share/keyrings/mattermost-archive-keyring.gpg > /dev/null
+        creates: /usr/share/keyrings/mattermost-archive-keyring.gpg
     - name: Ensure debconf is installed
       ansible.builtin.apt:
         name: debconf-utils
@@ -43,7 +45,7 @@
         url: https://deb.packages.mattermost.com/repo-setup.sh
         dest: /tmp/mattermost/omnibus-preinstall.sh
         mode: '554'
-    - name: Execute omnibus pre-onstall script
+    - name: Execute omnibus pre-install script
       ansible.builtin.shell: /tmp/mattermost/omnibus-preinstall.sh
     - name: Install mattermost-omnibus
       ansible.builtin.apt:
