@@ -47,3 +47,5 @@
         DEBIAN_FRONTEND: noninteractive
     - name: Enable calls for everyone
       ansible.builtin.command: mmctl config set "PluginSettings.Plugins.com.mattermost.calls.defaultenabled" "true"
+    - name: Set Mattermost server name
+      ansible.builtin.command: mmctl config set "ServiceSettings.SiteName" "{{ lookup('ansible.builtin.env', 'SERVER_NAME') }}"
