@@ -176,5 +176,4 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
             {/if}
         </div>
     </div>
-    {/if}
 </main>
