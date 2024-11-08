@@ -1,7 +1,9 @@
 # Discord Deployments
 
 Официальный сайт проекта: https://dsgnmike.me
+
 Презентация: [смотреть](https://docs.google.com/presentation/d/1GOjZSdmsZaRqC8NrDl4A0rsGA4zhfD73a4WahSdHxOw/edit#slide=id.g25703cb3a7b_0_39)
+
 Видео демо: [смотреть](https://drive.google.com/file/d/16QXf0CJvUF3_NPcLMxDkV7yRgu7l_qeg/view?usp=sharing)
 
 Мы очень огорчены тем, что Discord больше недоступен в России, и все еще не можем с этим смириться. 
