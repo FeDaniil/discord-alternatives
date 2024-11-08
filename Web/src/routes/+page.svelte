@@ -3,7 +3,6 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import { Badge } from "$lib/components/ui/badge";
-    import * as AlertDialog from "$lib/components/ui/alert-dialog";
     import GradientBackground from './GradientBackground.svelte';
 
     type Platform = {
@@ -177,31 +176,5 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
             {/if}
         </div>
     </div>
-
-    {#if !validateForm()}
-        <AlertDialog.Root>
-            <AlertDialog.Content>
-                <AlertDialog.Header>
-                    <AlertDialog.Title>Есть ошибки в форме</AlertDialog.Title>
-                    <AlertDialog.Description>
-                        Пожалуйста, исправьте следующие ошибки:
-                        <ul>
-                            {#if errors.serverName}
-                                <li>{errors.serverName}</li>
-                            {/if}
-                            {#if errors.serverDomain}
-                                <li>{errors.serverDomain}</li>
-                            {/if}
-                            {#if errors.adminEmail}
-                                <li>{errors.adminEmail}</li>
-                            {/if}
-                        </ul>
-                    </AlertDialog.Description>
-                </AlertDialog.Header>
-                <AlertDialog.Footer>
-                    <AlertDialog.Cancel>Закрыть</AlertDialog.Cancel>
-                </AlertDialog.Footer>
-            </AlertDialog.Content>
-        </AlertDialog.Root>
     {/if}
 </main>
