@@ -3,7 +3,7 @@
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
     import { Badge } from "$lib/components/ui/badge";
-    import { toast } from "svelte-sonner";
+    import * as AlertDialog from "$lib/components/ui/alert-dialog";
     import GradientBackground from './GradientBackground.svelte';
 
     type Platform = {
@@ -15,11 +15,17 @@
     };
 
     let serverName = '';
-    let serverAddress = '';
+    let adminEmail = '';
     let result = '';
     let serverDomain = '';
     let copied = false;
     let selectedPlatform = 'mattermost';
+
+    let errors = {
+        serverName: '',
+        serverDomain: '',
+        adminEmail: ''
+    };
 
     const platforms: Platform[] = [
         { id: 'mattermost', name: 'Mattermost', port: '8065', enabled: true },
@@ -33,14 +39,44 @@
         setTimeout(() => copied = false, 2000);
     }
 
+    function validateForm() {
+        let isValid = true;
+        errors = { serverName: '', serverDomain: '', adminEmail: '' };
+
+        if (!serverName) {
+            errors.serverName = 'Имя сервера обязательно.';
+            isValid = false;
+        }
+
+        if (!serverDomain) {
+            errors.serverDomain = 'Имя домена обязательно.';
+            isValid = false;
+        }
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(adminEmail)) {
+            errors.adminEmail = 'Некорректный e-mail адрес.';
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
     function generateScript() {
-        return `
-sudo mkdir -p /opt/${selectedPlatform} && cd /opt/${selectedPlatform} && echo "APP=${selectedPlatform}
+        if (validateForm()) {
+            return `
+mkdir -p /tmp/${selectedPlatform} && cd /tmp/${selectedPlatform} && echo "APP=${selectedPlatform}
 SERVER_NAME=${serverName}
 SERVER_DOMAIN=${serverDomain}
-ADMIN_EMAIL=${serverAddress}" > .env
+ADMIN_EMAIL=${adminEmail}" > .env
 sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/discord-alternatives/HEAD/setup.sh)"
-        `;
+            `;
+        }
+        return '';
+    }
+
+    function handleGenerateScript() {
+        result = generateScript();
     }
 
     function selectPlatform(platform: Platform) {
@@ -61,6 +97,11 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
         width: 50%; /* Adjust as needed */
         padding: 16px;
         max-width: 600px; /* Optional: Add a max width for better control */
+    }
+
+    .error {
+        color: red;
+        font-size: 0.875rem;
     }
 </style>
 
@@ -92,17 +133,26 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
                 <div class="flex flex-col gap-2">
                     <Label for="name">Имя сервера:</Label>
                     <Input id="name" bind:value={serverName}/>
+                    {#if errors.serverName}
+                        <span class="error">{errors.serverName}</span>
+                    {/if}
                 </div>
                 <div class="flex flex-col gap-2">
-                    <Label for="name">Имя домена:</Label>
-                    <Input id="name" bind:value={serverDomain}/>
+                    <Label for="domain">Имя домена:</Label>
+                    <Input id="domain" bind:value={serverDomain}/>
+                    {#if errors.serverDomain}
+                        <span class="error">{errors.serverDomain}</span>
+                    {/if}
                 </div>
                 <div class="flex flex-col gap-2">
-                    <Label for="address">Email адрес:</Label>
-                    <Input id="address" bind:value={serverAddress}/>
+                    <Label for="email">Email адрес:</Label>
+                    <Input id="email" bind:value={adminEmail}/>
+                    {#if errors.adminEmail}
+                        <span class="error">{errors.adminEmail}</span>
+                    {/if}
                 </div>
                 <div class="flex justify-center">
-                    <Button variant="default" on:click={() => result = generateScript()}>
+                    <Button variant="default" on:click={handleGenerateScript}>
                         Генерировать сценарий
                     </Button>
                 </div>
@@ -127,4 +177,33 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
             {/if}
         </div>
     </div>
+
+    <!-- AlertDialog к форме, если валидация не пройдена -->
+    {#if !validateForm()}
+        <AlertDialog.Root>
+            <AlertDialog.Trigger>Open</AlertDialog.Trigger>
+            <AlertDialog.Content>
+                <AlertDialog.Header>
+                    <AlertDialog.Title>Есть ошибки в форме</AlertDialog.Title>
+                    <AlertDialog.Description>
+                        Пожалуйста, исправьте следующие ошибки:
+                        <ul>
+                            {#if errors.serverName}
+                                <li>{errors.serverName}</li>
+                            {/if}
+                            {#if errors.serverDomain}
+                                <li>{errors.serverDomain}</li>
+                            {/if}
+                            {#if errors.adminEmail}
+                                <li>{errors.adminEmail}</li>
+                            {/if}
+                        </ul>
+                    </AlertDialog.Description>
+                </AlertDialog.Header>
+                <AlertDialog.Footer>
+                    <AlertDialog.Cancel>Закрыть</AlertDialog.Cancel>
+                </AlertDialog.Footer>
+            </AlertDialog.Content>
+        </AlertDialog.Root>
+    {/if}
 </main>
