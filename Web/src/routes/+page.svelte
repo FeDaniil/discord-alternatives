@@ -159,7 +159,7 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
 
             {#if result}
                 <div class="mt-8">
-                    <div class="flex justify-between items-center">
+                    <div class="flex flex-wrap justify-between items-center">
                         <h2 class="text-xl">Сгенерированный сценарий</h2>
                         <Button
                                 variant="outline"
