@@ -94,9 +94,9 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
     }
 
     .form-container {
-        width: 50%; /* Adjust as needed */
+        width: 90%; /* Adjust as needed */
         padding: 16px;
-        max-width: 600px; /* Optional: Add a max width for better control */
+        max-width: 800px; /* Optional: Add a max width for better control */
     }
 
     .error {
@@ -105,15 +105,15 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
     }
 </style>
 
-<main class="min-h-screen flex justify-center items-center">
+<main class="min-h-screen flex flex-col sm:flex-row justify-center items-center px-4 sm:px-0">
     <GradientBackground />
-    <div class="container rounded-lg">
+    <div class="container rounded-lg m-4">
         <div class="form-container rounded-lg border bg-gray-50 bg-opacity-90">
-            <div class="mb-8">
+            <div class="mb-8 text-center">
                 <h1 class="text-2xl font-semibold">Генератор аналога Discord / Slack</h1>
             </div>
 
-            <div class="flex mb-8 p-2">
+            <div class="flex flex-wrap mb-8 p-2 justify-center gap-2">
                 {#each platforms as platform}
                     <Button
                             variant={selectedPlatform === platform.id ? "default" : "outline"}
@@ -178,10 +178,8 @@ sudo /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/FeDaniil/disco
         </div>
     </div>
 
-    <!-- AlertDialog к форме, если валидация не пройдена -->
     {#if !validateForm()}
         <AlertDialog.Root>
-            <AlertDialog.Trigger>Open</AlertDialog.Trigger>
             <AlertDialog.Content>
                 <AlertDialog.Header>
                     <AlertDialog.Title>Есть ошибки в форме</AlertDialog.Title>
